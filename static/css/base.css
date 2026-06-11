@@ -85,8 +85,16 @@ span svg {
     transition: background-color 0.2s;
 }
 
-.black-button svg {
-    margin: 0;
+.black-button-share {
+    background: white !important;
+    color: #000 !important;
+    border: 1px solid #ddd !important;
+    transition: all 0.2s ease;
+}
+
+.black-button-share:hover {
+    background: #f0f0f0 !important;
+    border-color: #333 !important;
 }
 
 .project-status {
@@ -112,4 +120,8 @@ span svg {
 
 .black-button-share svg {
     margin: 0;
+}
+
+.hidden {
+    display: none !important;
 }

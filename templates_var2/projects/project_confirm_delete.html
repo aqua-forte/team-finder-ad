@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Удаление проекта{% endblock %}
+
+{% block content %}
+<div class="project-container" style="display: flex; justify-content: center; align-items: center; min-height: 60vh;">
+    <div class="project-card" style="text-align: center; max-width: 500px;">
+        <h2>Удаление проекта</h2>
+        <p>Вы уверены, что хотите удалить проект <strong>{{ project.name }}</strong>? Это действие необратимо.</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="project-actions" style="justify-content: center; margin-top: 20px;">
+                <a href="{% url 'projects:project_detail' project.pk %}" class="cancel-button" style="text-decoration: none; color: grey; margin-right: 20px;">Отмена</a>
+                <button type="submit" class="black-button" style="background-color: red; color: white;">Удалить проект</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

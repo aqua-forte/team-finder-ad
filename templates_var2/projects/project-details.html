@@ -12,7 +12,7 @@
 <div class="project-container">
     <div class="project-card">
         <div class="project-card-header">
-            <a href="/users/{{ project.owner.id }}">
+            <a href="{% url 'users:profile' project.owner.pk %}">
                 <div class="project-card-header-left">
                     {% if project.owner.avatar %}
                         <img src="{{ project.owner.avatar.url }}" alt="Аватар автора" class="project-author-avatar">
@@ -20,55 +20,68 @@
                         <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию" class="project-author-avatar">
                     {% endif %}
                     <div class="project-meta">
-                        <span class="project-author">{{ project.owner.name }} {{ project.owner.surname }}</span>
-                        <span class="project-date">{{ project.created_at|date:"d.m.Y" }}</span>
+                        <div class="project-author-info">
+                            <span class="project-author">{{ project.owner.name }} {{ project.owner.surname }}</span>
+                            <span class="project-date">{{ project.created_at|date:"d.m.Y" }}</span>
+                        </div>
+                        <span class="project-status-black">
+                            {% if project.status == "open" %}
+                                Открыт
+                            {% elif project.status == "closed" %}
+                                Закрыт
+                            {% else %}
+                                {{ project.status }}
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
             </a>
-            <div class="project-card-header-right">
-                <span class="project-status-black">
-                    {% if project.status == "open" %}
-                        Открыт
-                    {% elif project.status == "closed" %}
-                        Закрыт
-                    {% else %}
-                        {{ project.status }}
-                    {% endif %}
-                </span>
+            <div class="project-card-header-right" style="display: flex; gap: 8px;">
+                <a href="#"
+                   class="black-button black-button-share share-button"
+                   data-url="{% url 'projects:project_detail' project.pk %}">
+                    {% include 'includes/svg/share.html' %}
+                </a>
+                <button class="black-button black-button-share project-fav-icon {% if request.user.is_authenticated and request.user in project.favorites.all %}favorite{% else %}not-favorite{% endif %}" 
+                        data-project-id="{{ project.pk }}" 
+                        data-fav="{% if request.user.is_authenticated and request.user in project.favorites.all %}true{% else %}false{% endif %}"
+                        data-auth="{% if request.user.is_authenticated %}true{% else %}false{% endif %}"
+                        style="cursor: pointer;">
+                    {% include 'includes/svg/heart.html' %}
+                </button>
             </div>
         </div>
 
         <div class="project-card-body">
                 <h2 class="project-title">{{ project.name }}</h2>
                 <p class="project-description">{{ project.description }}</p>
-
                 {% if project.github_url %}
-                <p class="project-link">
-                    {% include 'includes/svg/github.html' %}
-                    <a href="{{ project.github_url }}" target="_blank">Репозиторий на GitHub</a>
-                </p>
+                <div class="project-github-link">
+                    <a href="{{ project.github_url }}" target="_blank" class="project-github-url-link">
+                        {% include 'includes/svg/github.html' %} 
+                        GitHub Репозиторий
+                    </a>
+                </div>
                 {% endif %}
         </div>
         <div class="project-actions">
-            <a href="#"
-               class="black-button black-button-share share-button"
-               data-url="/projects/{{ project.id }}">
-                {% include 'includes/svg/share.html' %}
-            </a>
-            {% if user.id == project.owner.id %}
-                <a href="/projects/{{ project.id }}/edit" class="black-button">
+            {% if request.user == project.owner or request.user.is_staff %}
+                <a href="{% url 'projects:project_edit' project.pk %}" class="black-button black-button-share">
                     {% include 'includes/svg/pen.html' %}
                     Редактировать
                 </a>
                 {% if project.status == "open" %}
-                    <button class="black-button" id="complete-project-btn" data-id="{{ project.id }}">
+                    <button class="black-button black-button-share" id="complete-project-btn" data-id="{{ project.pk }}">
                         Завершить проект
                     </button>
                 {% endif %}
+                {% if request.user.is_staff %}
+                    <a href="{% url 'projects:project_delete' project.pk %}" class="black-button black-button-share" style="color: red !important;">Удалить проект</a>
+                {% endif %}
             {% else %}
-                {% if user.is_authenticated %}
+                {% if request.user.is_authenticated %}
                     <button id="participate-btn" class="black-button"
-                            data-project="{{ project.id }}"
+                            data-project="{{ project.pk }}"
                             data-user-id="{{ request.user.id }}"
                             data-user-name="{{ request.user.name }} {{ request.user.surname }}"
                             data-user-avatar="{% if request.user.avatar %}{{ request.user.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
@@ -89,7 +102,7 @@
     <h3>Участники проекта (<span id="participants-count" style="display:inline">{{ project.participants.all|length }}</span>)</h3>
     <div id="participants-list" class="participants-list">
         {% for member in project.participants.all %}
-        <a href="/users/{{ member.id }}" id="participant-{{ member.id }}">
+        <a href="{% url 'users:profile' member.pk %}" id="participant-{{ member.id }}">
             <div class="participant-item">
                 {% if member.avatar %}
                     <img src="{{ member.avatar.url }}" alt="Аватар" class="participant-avatar">
@@ -110,5 +123,6 @@
         </div>
     </div>
 </div>
+{% include 'includes/project-fav-toggle.js' %}
 {% endblock %}
 {% endwith %}

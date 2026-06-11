@@ -34,11 +34,17 @@
 
 .project-meta {
     display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
     font-size: 14px;
     color: #555;
+}
+
+.project-author-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .project-author {
@@ -62,6 +68,30 @@
     font-size: 14px;
 }
 
+.project-github-link {
+    margin-bottom: 32px;
+}
+
+.project-github-url-link {
+    color: #0066cc;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.project-github-url-link svg {
+    fill: none;
+    stroke: #000;
+}
+
+.project-github-url-link:hover {
+    color: #004499;
+    text-decoration: underline;
+}
+
 .project-card-body {
     display: flex;
     flex-direction: column;
@@ -78,7 +108,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    justify-content: flex-end
+    justify-content: flex-start
 }
 
 .project-participants-card {

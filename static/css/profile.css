@@ -16,6 +16,50 @@
     margin-bottom: 20px;
 }
 
+.profile-projects-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.projects-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #000;
+    display: block;
+}
+
+.profile-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-section h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.profile-section .projects-card-title {
+    margin-bottom: 30px;
+}
+
+.skills-list {
+    color: #555;
+    margin: 0;
+}
+
 .profile-info {
     display: flex;
     align-items: center;
@@ -56,11 +100,34 @@
     color: #666;
 }
 
+.profile-contacts span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.profile-contacts svg {
+    width: 16px;
+    height: 16px;
+}
+
 .profile-actions {
-    min-width: 415px;
     display: flex;
     gap: 10px;
     justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.black-button-share {
+    background: white !important;
+    color: #000 !important;
+    border: 1px solid #ddd !important;
+    transition: all 0.2s ease;
+}
+
+.black-button-share:hover {
+    background: #f0f0f0 !important;
+    border-color: #333 !important;
 }
 
 .projects-grid-single {

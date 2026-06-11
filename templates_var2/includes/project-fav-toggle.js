@@ -6,9 +6,15 @@
       button.addEventListener("click", async (e) => {
         e.preventDefault();
 
+        const isAuth = button.dataset.auth === "true";
+        if (!isAuth) {
+          window.location.href = `/users/login/?next=${encodeURIComponent(window.location.pathname)}`;
+          return;
+        }
+
         const projectId = button.dataset.projectId;
         const isFav = button.dataset.fav === "true";
-        const response = await fetch(`/projects/${projectId}/toggle-favorite/`, {
+        const response = await fetch(`/projects/${projectId}/favorite/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -141,10 +141,6 @@
     display: grid;
     gap: 24px;
     grid-template-columns: 1fr 1fr;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 20px;
     margin-bottom: 20px;
 }
 

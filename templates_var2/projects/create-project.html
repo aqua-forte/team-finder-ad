@@ -16,38 +16,43 @@
     {% csrf_token %}
 
     <div class="form-field">
-      {{ form.name.label_tag }}
-      {{ form.name }}
+      <label for="id_name">Название проекта</label>
+      <input type="text" name="name" id="id_name" value="{{ form.name.value|default:'' }}" required>
+      {% if form.name.errors %}
+        <div class="error-message" style="color: red; font-size: 0.8em;">{{ form.name.errors.0 }}</div>
+      {% endif %}
     </div>
 
     <div class="form-field">
-      {{ form.description.label_tag }}
-      {{ form.description }}
+      <label for="id_description">Описание проекта</label>
+      <textarea name="description" id="id_description">{{ form.description.value|default:'' }}</textarea>
+      {% if form.description.errors %}
+        <div class="error-message" style="color: red; font-size: 0.8em;">{{ form.description.errors.0 }}</div>
+      {% endif %}
     </div>
 
     <div class="form-field">
-      {{ form.github_url.label_tag }}
-      {{ form.github_url }}
+      <label for="id_github_url">Ссылка на GitHub репозиторий</label>
+      <input type="url" name="github_url" id="id_github_url" value="{{ form.github_url.value|default:'' }}" placeholder="https://github.com/username/repo">
+      {% if form.github_url.errors %}
+        <div class="error-message" style="color: red; font-size: 0.8em;">{{ form.github_url.errors.0 }}</div>
+      {% endif %}
     </div>
 
     <div class="form-field">
-      {{ form.status.label_tag }}
-      {{ form.status }}
+      <label for="id_status">Статус проекта</label>
+      <select name="status" id="id_status">
+        <option value="open" {% if form.status.value == 'open' %}selected{% endif %}>Открыт</option>
+        <option value="closed" {% if form.status.value == 'closed' %}selected{% endif %}>Закрыт</option>
+      </select>
+      {% if form.status.errors %}
+        <div class="error-message" style="color: red; font-size: 0.8em;">{{ form.status.errors.0 }}</div>
+      {% endif %}
     </div>
-
-    {% if form.errors %}
-    <div class="form-errors">
-      {% for field, errors in form.errors.items %}
-      {% for error in errors %}
-      <p>{{ error }}</p>
-      {% endfor %}
-      {% endfor %}
-    </div>
-    {% endif %}
 
     <div class="form-actions">
-      <a href="/" class="cancel-button">Отмена</a>
-      <button type="submit" class="save-button">{% if is_edit %}Сохранить{% else %}Опубликовать{% endif %}</button>
+      <a href="{% url 'projects:project_list' %}" class="cancel-button">Отмена</a>
+      <button type="submit" class="save-button">{% if is_edit %}Сохранить изменения{% else %}Опубликовать{% endif %}</button>
     </div>
   </form>
 </div>

@@ -9,66 +9,60 @@
 {% endblock %}
 
 {% block content %}
-<div class="profile-edit-container">
-    <h2 class="form-title">Редактирование профиля</h2>
-    <form method="post" enctype="multipart/form-data" class="profile-edit-form">
-        {% csrf_token %}
+<div class="profile-edit-page">
+    <div class="profile-edit-container">
+        <h2 class="form-title">Редактирование профиля</h2>
+        <form method="post" class="profile-edit-form">
+            {% csrf_token %}
 
-        <div class="avatar-upload">
-            <div class="avatar-preview">
-                {% if user.avatar %}
-                    <img src="{{ user.avatar.url }}" alt="Аватар">
-                {% else %}
-                    <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию">
-                {% endif %}
-                <div class="overlay">
-                    <button type="button" onclick="document.getElementById('id_avatar').click()">Заменить</button>
+            <div class="form-row">
+                <div class="form-field">
+                    {{ form.name.label }} {{ form.name }}
+                </div>
+                <div class="form-field">
+                    {{ form.surname.label }} {{ form.surname }}
                 </div>
             </div>
-            {{ form.avatar }}
-        </div>
 
-        <div class="form-row">
             <div class="form-field">
-                {{ form.name.label_tag }}
-                {{ form.name }}
+                {{ form.email.label }} {{ form.email }}
             </div>
-            <div class="form-field">
-                {{ form.surname.label_tag }}
-                {{ form.surname }}
-            </div>
-        </div>
 
-        <div class="form-field">
-            {{ form.about.label_tag }}
-            {{ form.about }}
-        </div>
-
-        <div class="form-row">
             <div class="form-field">
-                {{ form.phone.label_tag }}
-                {{ form.phone }}
+                {{ form.avatar.label }}
+                <input type="text" name="avatar" class="form-control" value="{{ form.avatar.value|default:'' }}">
             </div>
-            <div class="form-field">
-                {{ form.github_url.label_tag }}
-                {{ form.github_url }}
-            </div>
-        </div>
 
-        {% if form.errors %}
-        <div class="form-errors">
-            {% for field, errors in form.errors.items %}
-                {% for error in errors %}
-                    <p>{{ error }}</p>
+            <div class="form-field">
+                {{ form.about.label }} {{ form.about }}
+            </div>
+
+            <div class="form-row">
+                <div class="form-field">
+                    {{ form.phone.label }} {{ form.phone }}
+                </div>
+                <div class="form-field">
+                    {{ form.github_url.label }} {{ form.github_url }}
+                </div>
+            </div>
+
+            <div class="form-field">
+                {{ form.skills_text.label }} {{ form.skills_text }}
+            </div>
+
+            {% if form.errors %}
+            <div class="form-errors">
+                {% for error in form.errors.values %}
+                    <p style="color: red;">{{ error }}</p>
                 {% endfor %}
-            {% endfor %}
-        </div>
-        {% endif %}
+            </div>
+            {% endif %}
 
-        <div class="form-actions">
-            <a href="/users/{{ user.id }}" class="cancel-button">Отмена</a>
-            <button type="submit" class="save-button">Сохранить</button>
-        </div>
-    </form>
+            <div class="form-actions">
+                <a href="{% url 'users:profile' request.user.pk %}" class="cancel-button">Отмена</a>
+                <button type="submit" class="save-button">Сохранить</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

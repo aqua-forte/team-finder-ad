@@ -32,6 +32,33 @@
         </div>
     </div>
 
+    {% if request.user.is_authenticated %}
+    <div class="skills-filter">
+        <span class="filter-label">Быстрые фильтры:</span>
+        <div class="filter-chips">
+            <a href="?filter=favorites_authors"
+               class="filter-chip {% if active_filter == 'favorites_authors' %}active{% endif %}">
+                Авторы избранных проектов
+            </a>
+            <a href="?filter=my_projects_authors"
+               class="filter-chip {% if active_filter == 'my_projects_authors' %}active{% endif %}">
+                Авторы моих проектов
+            </a>
+            <a href="?filter=my_project_fans"
+               class="filter-chip {% if active_filter == 'my_project_fans' %}active{% endif %}">
+                Фанаты моих проектов
+            </a>
+            <a href="?filter=my_projects_participants"
+               class="filter-chip {% if active_filter == 'my_projects_participants' %}active{% endif %}">
+                Участники моих проектов
+            </a>
+            {% if active_filter %}
+            <a href="/users/list" class="filter-reset">Сбросить</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
     {% if page_obj.object_list %}
     <div class="participants-grid">
         {% for participant in page_obj %}

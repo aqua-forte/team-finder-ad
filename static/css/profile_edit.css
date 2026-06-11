@@ -1,3 +1,8 @@
+.profile-edit-page {
+    padding: 0 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
 .profile-edit-container {
     max-width: 800px;
     margin: 40px auto;
@@ -5,13 +10,13 @@
     border-radius: 12px;
     background: white;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    font-family: 'Segoe UI', sans-serif;
 }
 
 .form-title {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 24px;
+    text-align: left;
 }
 
 .profile-edit-form {
@@ -29,13 +34,15 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    gap: 6px;
+    gap: 2px;
 }
 
 .form-field label {
     font-size: 14px;
     color: #333;
     font-weight: 500;
+    margin: 0;
+    padding: 0;
 }
 
 .form-field input,
@@ -47,6 +54,7 @@
     padding: 10px;
     font-size: 14px;
     box-sizing: border-box;
+    margin: 0;
 }
 
 .form-field textarea {
@@ -93,7 +101,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
 }
 
 .avatar-preview {
