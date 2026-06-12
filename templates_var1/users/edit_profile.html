@@ -15,14 +15,14 @@
         {% csrf_token %}
 
         <div class="avatar-upload">
-            <div class="avatar-preview">
+            <div class="avatar-preview" onclick="document.getElementById('id_avatar').click()">
                 {% if user.avatar %}
                     <img src="{{ user.avatar.url }}" alt="Аватар">
                 {% else %}
                     <img src="{% static 'images/default-avatar.png' %}" alt="Аватар по умолчанию">
                 {% endif %}
                 <div class="overlay">
-                    <button type="button" onclick="document.getElementById('id_avatar').click()">Заменить</button>
+                    <button type="button">Заменить</button>
                 </div>
             </div>
             {{ form.avatar }}

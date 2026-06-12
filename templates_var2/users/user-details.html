@@ -82,7 +82,7 @@
             {% endif %}
             {% if request.user.is_staff %}
             <a href="{% url 'users:admin_change_password' user.pk %}" class="black-button black-button-share">Сменить пароль</a>
-            <a href="{% url 'users:admin_block_user' user.pk %}" class="black-button black-button-share">{% if user.is_active %}Заблокировать{% else %}Разблокировать{% endif %}</a>
+            <a href="{% url 'users:admin_toggle_user_status' user.pk %}" class="black-button black-button-share">{% if user.is_active %}Заблокировать{% else %}Разблокировать{% endif %}</a>
             <a href="{% url 'users:admin_delete_user' user.pk %}" class="black-button black-button-share" style="color: red !important;">Удалить</a>
             {% endif %}
         </div>

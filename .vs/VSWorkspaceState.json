@@ -1,11 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\projects",
-    "\\projects\\migrations",
+    "\\templates_var1",
+    "\\templates_var1\\projects",
     "\\templates_var2",
-    "\\templates_var2\\projects"
+    "\\templates_var2\\users",
+    "\\templates_var3",
+    "\\templates_var3\\projects",
+    "\\templates_var3\\users",
+    "\\users",
+    "\\users\\migrations"
   ],
-  "SelectedNode": "\\templates_var2\\projects\\project_list.html",
+  "SelectedNode": "\\manage.py",
   "PreviewInSolutionExplorer": false
 }

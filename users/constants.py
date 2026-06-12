@@ -1,0 +1,17 @@
+# Length constraints for User and Skill models
+USER_NAME_MAX_LENGTH = 124
+USER_SURNAME_MAX_LENGTH = 124
+USER_ABOUT_MAX_LENGTH = 256
+USER_PHONE_MAX_LENGTH = 12
+USER_GITHUB_URL_MAX_LENGTH = 100
+SKILL_NAME_MAX_LENGTH = 124
+
+# User list filters
+FILTER_FAVORITES_AUTHORS = "favorites_authors"
+FILTER_MY_PROJECTS_AUTHORS = "my_projects_authors"
+FILTER_MY_PROJECT_FANS = "my_project_fans"
+FILTER_MY_PROJECTS_PARTICIPANTS = "my_projects_participants"
+
+# Pagination and limits
+PAGINATION_LIMIT = 12
+SKILLS_SUGGESTIONS_LIMIT = 10

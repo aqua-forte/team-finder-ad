@@ -6,14 +6,52 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile_edit.css' %}">
+<style>
+    .avatar-upload-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+    }
+    .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        border: 3px solid #ddd;
+        transition: border-color 0.3s;
+    }
+    .avatar-preview:hover {
+        border-color: #007bff;
+    }
+    .avatar-label {
+        font-size: 0.9rem;
+        color: #666;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="profile-edit-page">
     <div class="profile-edit-container">
         <h2 class="form-title">Редактирование профиля</h2>
-        <form method="post" class="profile-edit-form">
+        <form method="post" enctype="multipart/form-data" class="profile-edit-form">
             {% csrf_token %}
+
+            <div class="avatar-upload-container">
+                <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}/static/images/default-avatar.png{% endif %}" 
+                     alt="Аватар" 
+                     class="avatar-preview" 
+                     id="avatar-preview"
+                     onclick="document.getElementById('id_avatar').click();">
+                <span class="avatar-label">Нажмите на фото, чтобы изменить</span>
+                {{ form.avatar }}
+                <style>
+                    #id_avatar { display: none; }
+                </style>
+            </div>
 
             <div class="form-row">
                 <div class="form-field">
@@ -26,11 +64,6 @@
 
             <div class="form-field">
                 {{ form.email.label }} {{ form.email }}
-            </div>
-
-            <div class="form-field">
-                {{ form.avatar.label }}
-                <input type="text" name="avatar" class="form-control" value="{{ form.avatar.value|default:'' }}">
             </div>
 
             <div class="form-field">
@@ -65,4 +98,16 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('id_avatar').addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('avatar-preview').src = e.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+</script>
 {% endblock %}

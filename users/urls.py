@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 app_name = "users"
@@ -15,7 +16,11 @@ urlpatterns = [
         views.admin_change_password,
         name="admin_change_password",
     ),
-    path("block/<int:pk>/", views.admin_block_user, name="admin_block_user"),
+    path(
+        "block/<int:pk>/",
+        views.admin_toggle_user_status,
+        name="admin_toggle_user_status",
+    ),
     path("delete/<int:pk>/", views.admin_delete_user, name="admin_delete_user"),
     path("list/", views.user_list, name="user_list"),
     path("<int:user_id>/skills/add/", views.add_skill, name="add_skill"),
