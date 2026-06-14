@@ -64,7 +64,7 @@ POSTGRES_PASSWORD=team_finder
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 
-TASK_VERSION=1
+TASK_VERSION=2
 ```
 
 Особое внимание обратите на строчку `TASK_VERSION=`. 
