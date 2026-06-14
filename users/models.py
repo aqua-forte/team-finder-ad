@@ -1,21 +1,18 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from .constants import (
-    SKILL_NAME_MAX_LENGTH,
-    USER_NAME_MAX_LENGTH,
-    USER_SURNAME_MAX_LENGTH,
-    USER_ABOUT_MAX_LENGTH,
-    USER_PHONE_MAX_LENGTH,
-    USER_GITHUB_URL_MAX_LENGTH,
-)
-from .validators import validate_github_url
+from .constants import (SKILL_NAME_MAX_LENGTH, USER_ABOUT_MAX_LENGTH,
+                        USER_GITHUB_URL_MAX_LENGTH, USER_NAME_MAX_LENGTH,
+                        USER_PHONE_MAX_LENGTH, USER_SURNAME_MAX_LENGTH)
 from .services import generate_user_avatar
+from .validators import validate_github_url
 
 
 class Skill(models.Model):
     name = models.CharField(
-        max_length=SKILL_NAME_MAX_LENGTH, unique=True, verbose_name="Название навыка"
+        max_length=SKILL_NAME_MAX_LENGTH,
+        unique=True,
+        verbose_name="Название навыка",
     )
 
     class Meta:
@@ -34,7 +31,10 @@ class User(AbstractUser):
     )
     email = models.EmailField(unique=True, verbose_name="Email")
     avatar = models.ImageField(
-        upload_to="avatars/", blank=True, default="", verbose_name="Аватар"
+        upload_to="avatars/",
+        blank=True,
+        default="",
+        verbose_name="Аватар",
     )
     about = models.TextField(
         max_length=USER_ABOUT_MAX_LENGTH, blank=True, verbose_name="О себе"

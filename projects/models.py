@@ -1,11 +1,8 @@
 from django.conf import settings
 from django.db import models
 
-from .constants import (
-    PROJECT_GITHUB_URL_MAX_LENGTH,
-    PROJECT_NAME_MAX_LENGTH,
-    PROJECT_STATUS_MAX_LENGTH,
-)
+from .constants import (PROJECT_GITHUB_URL_MAX_LENGTH, PROJECT_NAME_MAX_LENGTH,
+                        PROJECT_STATUS_MAX_LENGTH)
 
 
 class Project(models.Model):
@@ -14,7 +11,8 @@ class Project(models.Model):
         CLOSED = "closed", "Closed"
 
     name = models.CharField(
-        max_length=PROJECT_NAME_MAX_LENGTH, verbose_name="Название проекта"
+        max_length=PROJECT_NAME_MAX_LENGTH,
+        verbose_name="Название проекта",
     )
     description = models.TextField(blank=True, verbose_name="Описание")
     owner = models.ForeignKey(

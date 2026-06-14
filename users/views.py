@@ -7,29 +7,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
-from team_finder.utils import paginate_queryset
 from projects.models import Project
+from team_finder.utils import paginate_queryset
 
+from .constants import (FILTER_FAVORITES_AUTHORS, FILTER_MY_PROJECT_FANS,
+                        FILTER_MY_PROJECTS_AUTHORS,
+                        FILTER_MY_PROJECTS_PARTICIPANTS, PAGINATION_LIMIT,
+                        SKILLS_SUGGESTIONS_LIMIT)
+from .forms import LoginForm, ProfileForm, UserRegistrationForm
 from .models import Skill, User
-from .forms import UserRegistrationForm, ProfileForm, LoginForm
-from .constants import (
-    PAGINATION_LIMIT,
-    FILTER_FAVORITES_AUTHORS,
-    FILTER_MY_PROJECTS_AUTHORS,
-    FILTER_MY_PROJECT_FANS,
-    FILTER_MY_PROJECTS_PARTICIPANTS,
-    SKILLS_SUGGESTIONS_LIMIT,
-)
 
 
 def register(request):
-    if request.method != "POST":
-        form = UserRegistrationForm()
-        return render(request, "users/register.html", {"form": form})
-
-    form = UserRegistrationForm(request.POST, request.FILES)
-    if not form.is_valid():
+    form = (
+        UserRegistrationForm(request.POST or None, request.FILES or None)
+        if request.method == "POST"
+        else UserRegistrationForm()
+    )
+    if request.method != "POST" or not form.is_valid():
         return render(request, "users/register.html", {"form": form})
 
     form.save()
@@ -37,12 +32,12 @@ def register(request):
 
 
 def login_view(request):
-    if request.method != "POST":
-        form = LoginForm()
-        return render(request, "users/login.html", {"form": form})
-
-    form = LoginForm(data=request.POST)
-    if not form.is_valid():
+    form = (
+        LoginForm(data=request.POST or None)
+        if request.method == "POST"
+        else LoginForm()
+    )
+    if request.method != "POST" or not form.is_valid():
         return render(request, "users/login.html", {"form": form})
 
     user = form.get_user()
@@ -64,16 +59,12 @@ def edit_profile(request):
     if not request.user.is_authenticated:
         return redirect("users:login")
 
-    if request.method != "POST":
-        form = ProfileForm(instance=request.user)
-        return render(
-            request, "users/edit_profile.html", {"form": form, "user": request.user}
-        )
-
-    form = ProfileForm(
-        request.POST or None, request.FILES or None, instance=request.user
+    form = (
+        ProfileForm(request.POST or None, request.FILES or None, instance=request.user)
+        if request.method == "POST"
+        else ProfileForm(instance=request.user)
     )
-    if not form.is_valid():
+    if request.method != "POST" or not form.is_valid():
         return render(
             request, "users/edit_profile.html", {"form": form, "user": request.user}
         )
@@ -87,14 +78,12 @@ def change_password(request):
     if not request.user.is_authenticated:
         return redirect("users:login")
 
-    if request.method != "POST":
-        form = PasswordChangeForm(request.user)
-        return render(
-            request, "users/change_password.html", {"form": form, "user": request.user}
-        )
-
-    form = PasswordChangeForm(request.user, request.POST or None)
-    if not form.is_valid():
+    form = (
+        PasswordChangeForm(request.user, request.POST or None)
+        if request.method == "POST"
+        else PasswordChangeForm(request.user)
+    )
+    if request.method != "POST" or not form.is_valid():
         return render(
             request, "users/change_password.html", {"form": form, "user": request.user}
         )
@@ -155,7 +144,7 @@ def admin_delete_user(request, pk):
 def user_list(request):
     skill_name = request.GET.get("skill")
     filter_type = request.GET.get("filter")
-    users = User.objects.prefetch_related("skills").order_by("-date_joined")
+    users = User.objects.prefetch_related("skills")
 
     if skill_name:
         users = users.filter(skills__name__iexact=skill_name)
@@ -201,7 +190,8 @@ def user_list(request):
 def add_skill(request, user_id):
     if request.user.pk != user_id:
         return JsonResponse(
-            {"error": "You can only edit your own skills"}, status=HTTPStatus.FORBIDDEN
+            {"error": "You can only edit your own skills"},
+            status=HTTPStatus.FORBIDDEN,
         )
 
     if request.method == "POST":
@@ -216,7 +206,8 @@ def add_skill(request, user_id):
             skill, created = Skill.objects.get_or_create(name=skill_name)
         else:
             return JsonResponse(
-                {"error": "Skill ID or name is required"}, status=HTTPStatus.BAD_REQUEST
+                {"error": "Skill ID or name is required"},
+                status=HTTPStatus.BAD_REQUEST,
             )
 
         added = not request.user.skills.filter(pk=skill.pk).exists()
@@ -239,7 +230,8 @@ def add_skill(request, user_id):
 def remove_skill(request, user_id, skill_id):
     if request.user.pk != user_id:
         return JsonResponse(
-            {"error": "You can only edit your own skills"}, status=HTTPStatus.FORBIDDEN
+            {"error": "You can only edit your own skills"},
+            status=HTTPStatus.FORBIDDEN,
         )
 
     if request.method == "POST":
@@ -248,7 +240,8 @@ def remove_skill(request, user_id, skill_id):
             request.user.skills.remove(skill)
             return JsonResponse({"status": "ok"})
         return JsonResponse(
-            {"error": "User does not have this skill"}, status=HTTPStatus.BAD_REQUEST
+            {"error": "User does not have this skill"},
+            status=HTTPStatus.BAD_REQUEST,
         )
     return JsonResponse(
         {"error": "Invalid method"}, status=HTTPStatus.METHOD_NOT_ALLOWED

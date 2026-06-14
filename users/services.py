@@ -1,5 +1,6 @@
 import io
 import random
+
 from django.core.files.base import ContentFile
 from PIL import Image, ImageDraw, ImageFont
 
@@ -17,9 +18,9 @@ AVATAR_COLORS = [
 
 
 def generate_user_avatar(user):
-    """
-    Generates a simple placeholder avatar image based on the user's first name.
-    The image consists of a random background color and the first letter of the name.
+    """Генерирует простое изображение-заглушку для аватара пользователя.
+
+    Изображение состоит из случайного фона и первой буквы имени пользователя.
     """
     bg_color = random.choice(AVATAR_COLORS)
     size = (200, 200)

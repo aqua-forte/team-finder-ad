@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Skill
+
+from .models import Skill, User
 
 
 @admin.register(User)

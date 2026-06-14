@@ -1,8 +1,10 @@
 import re
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
-from .models import User, Skill
+
+from .models import Skill, User
 
 
 class UserRegistrationForm(forms.ModelForm):

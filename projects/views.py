@@ -2,11 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from team_finder.utils import paginate_queryset
-from .models import Project
-from .forms import ProjectForm
 from users.constants import PAGINATION_LIMIT
+
+from .forms import ProjectForm
+from .models import Project
 
 
 def project_list(request):
@@ -36,24 +36,22 @@ def favorite_projects(request):
 
 def project_detail(request, pk):
     project = get_object_or_404(
-        Project.objects.select_related("owner").prefetch_related("participants"), pk=pk
+        Project.objects.select_related("owner").prefetch_related("participants"),
+        pk=pk,
     )
     return render(request, "projects/project-details.html", {"project": project})
 
 
 @login_required
 def project_create(request):
-    # ... (unchanged)
-    if request.method != "POST":
-        form = ProjectForm()
+    form = (
+        ProjectForm(request.POST or None) if request.method == "POST" else ProjectForm()
+    )
+    if request.method != "POST" or not form.is_valid():
         return render(
-            request, "projects/create-project.html", {"form": form, "is_edit": False}
-        )
-
-    form = ProjectForm(request.POST or None)
-    if not form.is_valid():
-        return render(
-            request, "projects/create-project.html", {"form": form, "is_edit": False}
+            request,
+            "projects/create-project.html",
+            {"form": form, "is_edit": False},
         )
 
     project = form.save(commit=False)
@@ -65,21 +63,20 @@ def project_create(request):
 
 @login_required
 def project_edit(request, pk):
-    # ... (unchanged)
     project = get_object_or_404(Project, pk=pk)
     if project.owner != request.user and not request.user.is_staff:
         return redirect("projects:project_detail", pk=pk)
 
-    if request.method != "POST":
-        form = ProjectForm(instance=project)
+    form = (
+        ProjectForm(request.POST or None, instance=project)
+        if request.method == "POST"
+        else ProjectForm(instance=project)
+    )
+    if request.method != "POST" or not form.is_valid():
         return render(
-            request, "projects/create-project.html", {"form": form, "is_edit": True}
-        )
-
-    form = ProjectForm(request.POST or None, instance=project)
-    if not form.is_valid():
-        return render(
-            request, "projects/create-project.html", {"form": form, "is_edit": True}
+            request,
+            "projects/create-project.html",
+            {"form": form, "is_edit": True},
         )
 
     form.save()
@@ -88,7 +85,6 @@ def project_edit(request, pk):
 
 @login_required
 def project_delete(request, pk):
-    # ... (unchanged)
     project = get_object_or_404(Project, pk=pk)
     if not request.user.is_staff:
         return redirect("projects:project_detail", pk=pk)
@@ -102,7 +98,6 @@ def project_delete(request, pk):
 
 @login_required
 def project_toggle_participate(request, pk):
-    # ... (unchanged)
     project = get_object_or_404(Project, pk=pk)
     if request.user in project.participants.all():
         project.participants.remove(request.user)
@@ -116,7 +111,6 @@ def project_toggle_participate(request, pk):
 
 @login_required
 def project_favorite(request, pk):
-    # ... (unchanged)
     project = get_object_or_404(Project, pk=pk)
     if request.user in project.favorites.all():
         project.favorites.remove(request.user)
